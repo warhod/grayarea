@@ -22,7 +22,10 @@
             const map = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/dark-v10', // style URL
-            center: [-74.5, 40], // starting position [lng, lat]
+            maxZoom: 12,
+            minZoom: 8,
+            zoom: 10,
+            center: [-122.4196, 37.7749]  // San Fransico
             zoom: 9 // starting zoom
             });
     </script>
