@@ -11,6 +11,8 @@
 <body>
     <div id="map"></div>
     <div id="heatmapContainerWrapper">
+        
+        <h1 style="color: coral;">Year <span id="year">2020</span></h1>
         <div id="heatmapContainer"></div>
     </div>
     
@@ -38,7 +40,7 @@
                 radius: 50,
                 blur: .90,
                 // backgroundColor with alpha so you can see through it
-                backgroundColor: 'rgba(255, 255, 255, 0.5)'
+                // backgroundColor: 'rgba(255, 255, 255, 0.5)'
             });
             var heatmapContainer = document.getElementById('heatmapContainerWrapper');
             
@@ -55,7 +57,7 @@
                 heatmap.addData({ x: x, y: y, value: 1 });
                 
             };
-            
+            var yearNumber = 2020;
             heatmapContainer.onclick = function(e) {
                 
                 // now generate some random data
@@ -63,7 +65,7 @@
                 var max = 0;
                 var width = window.innerWidth;
                 var height = window.innerHeight;
-                var len = 300;
+                var len = 500;
                 
                 while (len--) {
                     var val = Math.floor(Math.random()*100);
@@ -81,15 +83,34 @@
                     console.log("point is " + JSON.stringify(point));
                     points.push(point);
                 }
-                // console.log("y is " + point.y);
+
+                setInterval(()=>{
+                    for (var i = 0; i < points.length; i++) {
+                        // points1[i].val += 200;
+                        points[i].radius += 10;
+                        // heatmap.addData(
+                        //     { 
+                        //         x: points[i].x, 
+                        //         y: points[i].y, 
+                        //         value: points[i].val, 
+                        //         radius: points[i].radius 
+                        //     });
+                    }
+                    var data = {
+                        max: max,
+                        data: points
+                    };
+                    
+                    var year = document.querySelector("#year");
+                    yearNumber +=10;
+                    year.innerHTML =  yearNumber;
+                    heatmap.setData(data);
+                }, 500);
+
                 // heatmap data format
-                var data = {
-                    max: max,
-                    data: points
-                };
+                
                 // if you have a set of datapoints always use setData instead of addData
                 // for data initialization
-                heatmap.setData(data);
             };            
         };
     </script>
