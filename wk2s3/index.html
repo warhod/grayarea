@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>Mousemove example (with backgroundColor) | heatmap.js</title>
-    <style>
-      body, html { margin:0; padding:0; height:100%;}
-      body { font-family:sans-serif; }
-      body * { font-weight:200;}
-      #heatmapContainerWrapper { width:100%; height:100%; position:absolute; }
-      #heatmapContainer { width:100%; height:100%;}
-      h1 { position:absolute; background:black; color:white; padding:10px; font-weight:200; z-index:10000;}
-      #all-examples-info { position:absolute; background:white; font-size:16px; padding:20px; top:100px; width:350px; line-height:150%; border:1px solid rgba(0,0,0,.2);}
-    </style>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no,utf-8">
+    <title>Awesome Apocalypse Heatmap</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh//mattaniahA/minified_heatmap/heatmap.min.js"></script>
   </head>
   <body>
+    <div id="map"></div>
     <div id="heatmapContainerWrapper">
-      <div id="heatmapContainer">
-
-      </div>
-
+      <div id="heatmapContainer"></div>
     </div>
-    <h1>heatmap.js Mousemove Example</h1>
-      <div id="all-examples-info">
-          <strong style="font-weight:bold;line-height:200%;font-size:18px;">Looking for more examples?</strong> <br />Check out the full <a href="http://www.patrick-wied.at/static/heatmapjs/examples.html?utm_source=gh_local" target="_blank">list of all heatmap.js examples</a> with more pointers &amp; inline documentation.
-        </div>
-    <script src="https://cdn.jsdelivr.net/gh//mattaniahA/minified_heatmap/heatmap.min.js"></script>
+
+    <script>
+        // TO MAKE THE MAP APPEAR YOU MUST
+        // ADD YOUR ACCESS TOKEN FROM
+        // https://account.mapbox.com
+        mapboxgl.accessToken = 'pk.eyJ1Ijoia2F6dW9uZSIsImEiOiJja3V1NDhxeXQ0ZGJjMzF0NGE0a3d0MDIwIn0.K0mcIfe3Y6i3Z5DY2MZSjA';
+            const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/dark-v10', // style URL
+            center: [-74.5, 40], // starting position [lng, lat]
+            zoom: 9 // starting zoom
+            });
+    </script>
+
     <script>
       window.onload = function() {
         // create a heatmap instance
         var heatmap = h337.create({
           container: document.getElementById('heatmapContainer'),
-          maxOpacity: .6,
+          maxOpacity: .1,
           radius: 50,
           blur: .90,
           // backgroundColor with alpha so you can see through it
-          backgroundColor: 'rgba(0, 0, 58, 0.96)'
+          backgroundColor: 'rgba(255, 255, 255, 0.5)'
         });
         var heatmapContainer = document.getElementById('heatmapContainerWrapper');
 
@@ -51,12 +53,13 @@
           heatmap.addData({ x: x, y: y, value: 1 });
 
         };
-
-        heatmapContainer.onclick = function(e) {
-          var x = e.layerX;
-          var y = e.layerY;
-          heatmap.addData({ x: x, y: y, value: 1 });
-        };
+        
+        // Don't need this behavior for now
+        // heatmapContainer.onclick = function(e) {
+        //   var x = e.layerX;
+        //   var y = e.layerY;
+        //   heatmap.addData({ x: x, y: y, value: 1 });
+        // };
 
       };
     </script>
