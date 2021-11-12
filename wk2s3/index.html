@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no,utf-8">
+    <title>Awesome Apocalypse Heatmap</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh//mattaniahA/minified_heatmap/heatmap.min.js"></script>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="heatmapContainerWrapper">
+        <div id="yearDiv" style="color: coral;">🔥🔥🔥  Global Heat Level in the YEAR <span id="year">2020</span> ☄️☄️☄️☠️☠️☠️❤️‍🔥❤️‍🔥❤️‍🔥</div>
+        <div id="heatmapContainer"></div>
+    </div>
+    
+    <script>
+        // TO MAKE THE MAP APPEAR YOU MUST
+        // ADD YOUR ACCESS TOKEN FROM
+        // https://account.mapbox.com
+        mapboxgl.accessToken = 'pk.eyJ1Ijoia2F6dW9uZSIsImEiOiJja3V1NDhxeXQ0ZGJjMzF0NGE0a3d0MDIwIn0.K0mcIfe3Y6i3Z5DY2MZSjA';
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/dark-v10', // style URL
+            maxZoom: 12,
+            minZoom: 6,
+            zoom: 12,  // starting zoom
+            center: [-122.44723983617504, 37.75063731587406],  // Center of San Fransico
+        });
+    </script>
+    
+    <script>
+        window.onload = function() {
+            // create a heatmap instance
+            var heatmap = h337.create({
+                container: document.getElementById('heatmapContainer'),
+                maxOpacity: .1,
+                radius: 50,
+                blur: .90,
+                // backgroundColor with alpha so you can see through it
+                // backgroundColor: 'rgba(255, 255, 255, 0.5)'
+            });
+            var heatmapContainer = document.getElementById('heatmapContainerWrapper');
+            
+            heatmapContainer.onmousemove = heatmapContainer.ontouchmove = function(e) {
+                // we need preventDefault for the touchmove
+                e.preventDefault();
+                var x = e.layerX;
+                var y = e.layerY;
+                if (e.touches) {
+                    x = e.touches[0].pageX;
+                    y = e.touches[0].pageY;
+                }
+                
+                heatmap.addData({ x: x, y: y, value: 1 });
+                
+            };
+            var yearNumber = 2020;
+            heatmapContainer.onclick = function(e) {
+                
+                // now generate some random data
+                var points = [];
+                var max = 0;
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                var len = 500;
+                
+                while (len--) {
+                    var val = Math.floor(Math.random()*100);
+                    // now also with custom radius
+                    var radius = Math.floor(Math.random()*70);
+                    
+                    max = Math.max(max, val);
+                    var point = {
+                        x: (Math.floor(Math.random()*width)) * 3 / 2,
+                        y: (Math.floor(Math.random()*height)) * 3 / 2,
+                        value: val,
+                        // radius configuration on point basis
+                        radius: radius
+                    };
+                    console.log("point is " + JSON.stringify(point));
+                    points.push(point);
+                }
+
+                setInterval(()=>{
+                    for (var i = 0; i < points.length; i++) {
+                        // points1[i].val += 200;
+                        points[i].radius += 10;
+                        // heatmap.addData(
+                        //     { 
+                        //         x: points[i].x, 
+                        //         y: points[i].y, 
+                        //         value: points[i].val, 
+                        //         radius: points[i].radius 
+                        //     });
+                    }
+                    var data = {
+                        max: max,
+                        data: points
+                    };
+                    
+                    var year = document.querySelector("#year");
+                    yearNumber +=10;
+                    year.innerHTML =  yearNumber;
+                    heatmap.setData(data);
+                }, 500);
+
+                // heatmap data format
+                
+                // if you have a set of datapoints always use setData instead of addData
+                // for data initialization
+            };            
+        };
+    </script>
+</body>
+</html>
